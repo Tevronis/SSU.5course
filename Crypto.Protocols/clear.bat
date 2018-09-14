@@ -1,0 +1,2 @@
+del *.sec
+del *.dat
