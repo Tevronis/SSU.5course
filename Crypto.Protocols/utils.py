@@ -18,6 +18,16 @@ def read_param(file, param):
     return ff[param]
 
 
+def save_param(file, paramname, param):
+    with open(file, 'w') as f:
+        json.dump({paramname: param}, f)
+
+
+def write_log(line, file='log.log'):
+    with open(file, 'a') as f:
+        f.write(line + '\n')
+
+
 def phi(n):
     result = n
     i = 2

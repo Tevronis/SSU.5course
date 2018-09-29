@@ -1,2 +1,1 @@
-del *.sec
-del *.dat
+del *.json
