@@ -33,6 +33,8 @@ class Hughes(Protocol):
                 break
         g = utils.generator(n)
         print('Сгенерированы параметры \n g: {} \n n: {}'.format(g, n))
+        with open('log.log', 'a') as f:
+            f.write('Сгенерированы параметры \n g: {} \n n: {}\n'.format(g, n))
         return {'g': g, 'n': n}
 
     @staticmethod
@@ -49,6 +51,9 @@ class Hughes(Protocol):
 
         print("Сгенерирован открытый ключ x: {}".format(x))
         print("Вычислен параметр z (обратный элемент к x): {}".format(z))
+        with open('log.log', 'a') as f:
+            f.write("Сгенерирован открытый ключ x: {}\n".format(x))
+            f.write("Вычислен параметр z (обратный элемент к x): {}\n".format(z))
         return {'x': x, 'z': z}
 
     def set_x(self):
@@ -80,30 +85,42 @@ class Hughes(Protocol):
 
         if Hughes.compare_secrets_key(alice, bob):
             print('Ключи совпали {} {}'.format(alice.k, bob.k))
+            with open('log.log', 'a') as f:
+                f.write('Ключи совпали {} {}\n'.format(alice.k, bob.k))
         else:
             print('Ключи не совпали {} {}'.format(alice.k, bob.k))
+            with open('log.log', 'a') as f:
+                f.write('Ключи не совпали {} {}\n'.format(alice.k, bob.k))
         pass
 
     def create_param_k(self):
         result = pow(self.g, self.x, self.n)
         print("Сгенерирован ключ k = {} пользователя {}".format(result, self.side))
+        with open('log.log', 'a') as f:
+            f.write("Сгенерирован ключ k = {} пользователя {}\n".format(result, self.side))
         self.k = result
 
     def create_param_Y(self):
         result = pow(self.g, self.x, self.n)
         print("Сгенерирован ключ Y = {} для отправки собеседнику. Пользователем {}".format(result, self.side))
+        with open('log.log', 'a') as f:
+            f.write("Сгенерирован ключ Y = {} для отправки собеседнику. Пользователем {}\n".format(result, self.side))
         self.Y = result
 
     def create_param_X(self, user):
         self.Y = self.users_keys[user]
         result = pow(self.Y, self.x, self.n)
         print("Сгенерирован ключ X = {} для отправки собеседнику. Пользователем {}".format(result, self.side))
+        with open('log.log', 'a') as f:
+            f.write("Сгенерирован ключ X = {} для отправки собеседнику. Пользователем {}\n".format(result, self.side))
         self.X = result
 
     def create_secret_key(self, user):
         X = self.users_keys[user]
         result = pow(X, self.z, self.n)
         print("Стороной {0} вычислен секретный ключ между пользователями {0} и {1}: {2}".format(self.side, user, result))
+        with open('log.log', 'a') as f:
+            f.write("Стороной {0} вычислен секретный ключ между пользователями {0} и {1}: {2}\n".format(self.side, user, result))
         self.k = result
 
     def add_user_key(self, user, key):

@@ -1,11 +1,15 @@
 import functools
+import itertools
 from operator import mul
+from time import time
 
 import utils
 
 
 def euclid(a, b):
-    assert 0 < b <= a
+    if not 0 < b <= a:
+        return False
+    #assert 0 < b <= a
     r = [a, b]
     i = 1
     while True:
@@ -18,6 +22,8 @@ def euclid(a, b):
 
 
 def euclid_bin(a, b):
+    if not 0 < b <= a:
+        return False
     assert 0 < b <= a
     g = 1
     while a % 2 == 0 and b % 2 == 0:
@@ -40,7 +46,8 @@ def euclid_bin(a, b):
 
 
 def euclid_extended(a, b):
-    assert 0 < b <= a
+    if not 0 < b <= a:
+        return False
     r = [a, b]
     x = [1, 0]
     y = [0, 1]
@@ -85,12 +92,48 @@ def garner(r, m):
     return x
 
 
+def euclid_time_test(a, b):
+    start = time()
+    for t in range(1000000):
+        euclid(a, b)
+    print('time gcd: ', time() - start)
+
+    start = time()
+    for t in range(1000000):
+        euclid_bin(a, b)
+    print('time gcd bin: ', time() - start)
+
+    start = time()
+    for t in range(1000000):
+        euclid_extended(a, b)
+    print('time gcd extended: ', time() - start)
+
+
+def euclid_distance_test(d1, d2):
+    s = range(d1, d2)
+    f = range(d1, d2)
+    start = time()
+    for a, b in itertools.product(s, f):
+        euclid(a, b)
+    print('time gcd: ', time() - start)
+
+    start = time()
+    for a, b in itertools.product(s, f):
+        euclid_bin(a, b)
+    print('time gcd bin: ', time() - start)
+
+    start = time()
+    for a, b in itertools.product(s, f):
+        euclid_extended(a, b)
+    print('time gcd extended: ', time() - start)
+
 def main():
     """
     simple for Garner and Chine theorem
     a: 2 1 3 8
     m: 5 7 11 13
     """
+
     mod = int(input('1 - Chine theorem, 2 - Garner, 3 - Euclides '))
     if mod != 3:
         a = [int(item) for item in input('a: ').split()]
@@ -100,10 +143,17 @@ def main():
         if mod == 2:
             print(garner(a, m))
     else:
-        a, b = list(map(int, input('a, b: ').split()))
-        print('gcd: ', euclid(a, b))
-        print('gcd binary: ', euclid_bin(a, b))
-        print('gcd extended, x, y: ', euclid_extended(a, b))
+        euclid_time_test(321, 123)
+        euclid_time_test(16777217, 1023)
+        euclid_distance_test(1, 1000)
+        euclid_distance_test(20000, 21000)
+        """a, b = list(map(int, input('a, b: ').split()))
+        start = time()
+        print('gcd: ', euclid(a, b), 'time: ', time() - start)
+        start = time()
+        print('gcd binary: ', euclid_bin(a, b), 'time: ', time() - start)
+        start = time()
+        print('gcd extended, x, y: ', euclid_extended(a, b), 'time: ', time() - start)"""
 
 
 if __name__ == '__main__':

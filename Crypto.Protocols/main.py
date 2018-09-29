@@ -51,7 +51,7 @@ def main():
         users = input('Please, enter users names: ').split()
         print('User {} is initiator'.format(users[0]))
         start_protocol(protocol, users, users[0])
-    input()
+    #input()
 
 
 if __name__ == '__main__':

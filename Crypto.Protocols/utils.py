@@ -1,3 +1,4 @@
+import json
 import random
 
 import sympy
@@ -9,6 +10,12 @@ def get_big_digit(a=10 ** 100, b=10 ** 110):
 
 def get_big_prime(a=10 ** 100, b=10 ** 110):
     return sympy.randprime(a, b)
+
+
+def read_param(file, param):
+    with open(file) as f:
+        ff = json.load(f)
+    return ff[param]
 
 
 def phi(n):
