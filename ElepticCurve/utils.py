@@ -1,13 +1,56 @@
+# -*- coding: utf-8 -*-
+import itertools
+import random
+
 import sympy
 
 
 def get_prime(l):
-    #return 65129
+    # return 65129
     res = sympy.randprime(2 ** l, 2 ** (l + 1))
     return res
 
 
+def isprime(n):
+    return test_miller_rabin(n, 10)
+    # return sympy.isprime(n)
+
+
+def test_miller_rabin(n, K=10):
+    def getST(t):
+        s = 0
+        while t % 2 == 0:
+                t //= 2
+                s += 1
+        return s, t
+
+    if n == 2 or n == 3:
+        return True
+
+    if n < 2 or n % 2 == 0:
+        return False
+
+    s, t = getST(n - 1)
+    for k in range(K):
+        a = random.randrange(2, n - 2)
+        x = pow(a, t, n)
+        if x == 1 or x == n - 1:
+            continue
+        for i in range(1, s):
+            x = (x * x) % n
+            if x == 1:
+                return False
+            if x == n - 1:
+                break
+        if x != n - 1:
+            return False
+    return True
+
+
 def shanks_tonally(n, p):
+    """
+    https://ru.stackoverflow.com/questions/241799/Алгоритм-Шенкса-Тонелли
+    """
     n = n % p
     s = p - 1
     r = 0
@@ -42,6 +85,7 @@ def shanks_tonally(n, p):
 
 def complex_decomposition(D, p):
     """
+    algo 7.8.1 Makhovenko
     :param D: D > 0
     :param p: simple digit, D = 1
     :return: a, b: p = a^2 + Db^2
@@ -80,18 +124,14 @@ def complex_decomposition(D, p):
 
 
 def legendre_symbol(a, p):
-    # return sympy.legendre_symbol(a, p)
     if a % p == 0:
         return 0
     if a == 1:
         return 1
-    res = pow(a, p - 2, p)
-    # assert sympy.legendre_symbol(a, p) == res
-    return sympy.legendre_symbol(a, p)
-    # if a & 1 == 0:
-    #     return legendre_symbol(a // 2, p) * ((-1) ** ((p ** 2 - 1) // 8))
-    # if a & 1 == 1:
-    #     return legendre_symbol(p % a, a) * ((-1) ** ((a - 1) * (p - 1) // 4))
+    res = pow(a, (p - 1) // 2, p)
+    if res != 1:
+        res = -1
+    return res
 
 
 def jacobi_symbol(m, n):
@@ -138,9 +178,14 @@ def inverse(a, n):
 def test():
     a = 15
     p = 17
-    print(legendre_symbol(a, p))
-    print(shanks_tonally(7, 127))
-    print(complex_decomposition(7, 127))
+    # for a, p in itertools.product(range(1000), sympy.primerange(3, 1000)):
+    #     l = legendre_symbol(a, p)
+    #     ll = sympy.legendre_symbol(a, p)
+    #     assert l == ll
+    for n in range(10000):
+        assert sympy.isprime(n) == test_miller_rabin(n)
+    # print(shanks_tonally(7, 127))
+    # print(complex_decomposition(7, 127))
 
 
 if __name__ == '__main__':
