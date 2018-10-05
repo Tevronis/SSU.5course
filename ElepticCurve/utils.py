@@ -1,19 +1,31 @@
 # -*- coding: utf-8 -*-
-import itertools
+import functools
 import random
+from math import gcd
+from operator import mul
 
 import sympy
 
 
 def get_prime(l):
-    # return 65129
-    res = sympy.randprime(2 ** l, 2 ** (l + 1))
-    return res
+    p_r = 30 if l > 4 else 2 ** l
+    P = functools.reduce(mul, sympy.primerange(2, p_r))
+    while True:
+        q = random.randint(2 ** l, 2 ** (l + 1))
+        if gcd(q, P) == 1:
+            break
+    while not isprime(q):
+        q += P
+    print('anyyy', q)
+    assert isprime(q)
+    qq = sympy.randprime(2 ** l, 2 ** (l + 1))
+    assert isprime(qq)
+    print('sympy', qq)
+    return q
 
 
 def isprime(n):
     return test_miller_rabin(n, 10)
-    # return sympy.isprime(n)
 
 
 def test_miller_rabin(n, K=10):
@@ -182,8 +194,10 @@ def test():
     #     l = legendre_symbol(a, p)
     #     ll = sympy.legendre_symbol(a, p)
     #     assert l == ll
-    for n in range(10000):
-        assert sympy.isprime(n) == test_miller_rabin(n)
+
+    for n in range(10):
+        get_prime(100)
+        #assert sympy.isprime(n) == test_miller_rabin(n)
     # print(shanks_tonally(7, 127))
     # print(complex_decomposition(7, 127))
 

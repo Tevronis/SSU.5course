@@ -22,7 +22,7 @@ class EllipticPoint:
         elif EllipticPoint.iszero(Q):
             return P
         if EllipticPoint.equal_inv(P, Q, p):
-            return EllipticPoint(p, 0, 0)
+            return EllipticPoint(p, -1, -1)
         if not EllipticPoint.equal(P, Q):
             m = ((P.y - Q.y) % p) * inverse((P.x - Q.x) % p, p) % p
         else:
@@ -35,13 +35,14 @@ class EllipticPoint:
     @staticmethod
     def mul(P, k, a, p):
         p_n = EllipticPoint(p, P.x, P.y)
-        p_q = EllipticPoint(p, 0, 0)
+        p_q = EllipticPoint(p, -1, -1)
 
         kbin = bin(k)[2:]
         m = len(kbin)
         for i in range(m):
             if kbin[m - i - 1] == '1':
                 p_q = EllipticPoint.sum(p_q, p_n, a, p)
+
             p_n = EllipticPoint.sum(p_n, p_n, a, p)
         return p_q
 
@@ -55,7 +56,7 @@ class EllipticPoint:
 
     @staticmethod
     def iszero(p):
-        return p.x == 0 and p.y == 0
+        return p.x == -1 and p.y == -1
 
     def __eq__(self, other):
         return EllipticPoint.equal(self, other)

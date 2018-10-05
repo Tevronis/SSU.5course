@@ -1,1 +1,2 @@
 del *.json
+"" > log.log

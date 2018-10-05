@@ -8,10 +8,13 @@ from utils import read_param, save_param, write_log
 
 
 def get_public_params(len_p):
-    while True:
-        p = utils.get_big_prime(2 ** len_p, 2 ** (len_p + 1))
-        if sympy.isprime((p - 1) // 2):
-            break
+    aa = 2 ** len_p
+    bb = 2 ** (len_p + 1)
+    #while True:
+    p = utils.get_big_prime(aa, bb)
+        # if sympy.isprime((p - 1) // 2):
+        #    break
+    print('genned p')
     g = utils.generator(p)
     # print('Сгенерированы параметры \n g: {} \n p: {}'.format(g, p))
     with open('log.log', 'a') as f:
@@ -26,8 +29,8 @@ def get_private_params_Alice(p, g):
             break
     k = pow(g, x, p)
     with open('log.log', 'a') as f:
-        f.write("Алисой вычислен закрытый ключ x: {}\n".format(x))
-        f.write("Алисой сгенерирован открытый ключ k: {}\n".format(k))
+        f.write("Алисой вычислен закрытый параметр x: {}\n".format(x))
+        f.write("Алисой сгенерирован открытый параметр k: {}\n".format(k))
     return x, k
 
 
@@ -40,9 +43,9 @@ def get_private_params_Bob(p, g):
     z = utils.inverse(y, p - 1)
 
     with open('log.log', 'a') as f:
-        f.write("Бобом вычислен закрытый ключ y: {}\n".format(y))
+        f.write("Бобом вычислен закрытый параметр y: {}\n".format(y))
         f.write("Бобом вычислен параметр z (обратный элемент к y): {}\n".format(z))
-        f.write("Бобом сгенерирован открытый ключ d: {}\n".format(d))
+        f.write("Бобом сгенерирован открытый параметр d: {}\n".format(d))
     return y, d, z
 
 

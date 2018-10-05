@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys
+from time import time
 
 from elliptic_curve import EllipticPoint
 
@@ -54,7 +55,7 @@ def generator_elliptic_curve(l, m, prt=False):
 
             if prt: print('Step 6.')
             m = EllipticPoint.mul(e, N, A, p)
-            if m == EllipticPoint(p, 0, 0):
+            if m == EllipticPoint(p, -1, -1):
                 break
             if prt: print('Step 7.')
         Q = EllipticPoint.mul(e, N // r, A, p)
@@ -64,8 +65,8 @@ def generator_elliptic_curve(l, m, prt=False):
 
 def plot(values):
     import matplotlib.pyplot as plt
-    X = [item[0] for item in values]
-    Y = [item[1] for item in values]
+    X = [item[0] for item in values if item[0] != -1]
+    Y = [item[1] for item in values if item[1] != -1]
 
     plt.scatter(X, Y, s=1)
     plt.show()
@@ -73,19 +74,25 @@ def plot(values):
 
 def main(args):
     if len(args) == 1:
-        l, m = 50, 72
+        l, m = 10, 72
     else:
         l, m = map(int, args[1:])
-
+    start = time()
     p, A, Q, r = generator_elliptic_curve(l, m)
+    print('Time to gen:', time() - start)
+    # p = 773
+    # A, Q, r = 78, EllipticPoint(p, 117, 386), 408
     dots = [Q]
     print("p: {}, A: {}, Q: {}, r: {}".format(p, A, Q.__repr__(), r))
     print('Q * r:', EllipticPoint.mul(Q, r, A, p))
-    for i in range(10000):
-        pp = EllipticPoint.sum(Q, dots[i], A, p)
-        dots.append(pp)
-    dots = [[item.x, item.y] for item in dots]
-    plot(dots)
+    if l < 20:
+        for i in range(r - 1):
+            pp = EllipticPoint.sum(Q, dots[i], A, p)
+            dots.append(pp)
+        dots = [[item.x, item.y] for item in dots]
+        assert r == len(dots)
+        open('dots.txt', 'w').write(''.join(list(map(str, dots))))
+        plot(dots)
 
 
 if __name__ == '__main__':

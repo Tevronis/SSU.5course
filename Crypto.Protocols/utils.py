@@ -43,6 +43,12 @@ def phi(n):
 
 
 def generator(p):
+    # pg = 2
+    # while True:
+    #     if pow(g, p, p) == 1:
+    #         break
+    #     g += 1
+    # return g
     ph = p - 1
     n = ph
     fact = []
