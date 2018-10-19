@@ -74,7 +74,7 @@ def plot(values):
 
 def main(args):
     if len(args) == 1:
-        l, m = 10, 72
+        l, m = 8, 72
     else:
         l, m = map(int, args[1:])
     start = time()
@@ -84,7 +84,7 @@ def main(args):
     # A, Q, r = 78, EllipticPoint(p, 117, 386), 408
     dots = [Q]
     print("p: {}, A: {}, Q: {}, r: {}".format(p, A, Q.__repr__(), r))
-    print('Q * r:', EllipticPoint.mul(Q, r, A, p))
+    print('Q * r:', EllipticPoint.mul(Q, r * r, A, p))
     if l < 20:
         for i in range(r - 1):
             pp = EllipticPoint.sum(Q, dots[i], A, p)

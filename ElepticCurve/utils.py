@@ -16,11 +16,10 @@ def get_prime(l):
             break
     while not isprime(q):
         q += P
-    print('anyyy', q)
     assert isprime(q)
     qq = sympy.randprime(2 ** l, 2 ** (l + 1))
     assert isprime(qq)
-    print('sympy', qq)
+
     return q
 
 
@@ -81,10 +80,12 @@ def shanks_tonally(n, p):
         m += 1
     # находим квадратичный невычет
     z = 0
-    for i in range(1, 1000000):
+    i = 1
+    while True:
         if legendre_symbol(i, p) == -1:
             z = i
             break
+        i += 1
     # находим коэф-ты, на которые будем умножать
     yd_l = pow(pow(z, s, p), pow(2, r - m), p)
     yd_w = pow(pow(z, s, p), pow(2, r - m - 1), p)

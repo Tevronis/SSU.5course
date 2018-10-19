@@ -1,7 +1,10 @@
+import functools
 import json
 import random
+from operator import mul
 
 import sympy
+from sympy import isprime
 
 
 def get_big_digit(a=10 ** 100, b=10 ** 110):
@@ -12,6 +15,26 @@ def get_big_prime(a=10 ** 100, b=10 ** 110):
     return sympy.randprime(a, b)
 
 
+def get_prime(l):
+    P = functools.reduce(mul, sympy.primerange(2, 30))
+    q = random.randint(2 ** (l - 1), 2 ** l)
+    while True:
+        if sympy.gcd(q, P) == 1:
+            break
+        q += 1
+    while not isprime(q):
+        q += P
+    # assert isprime(q)
+    # qq = sympy.randprime(2 ** (l - 1), 2 ** l)
+    # assert isprime(qq)
+
+    return q
+
+
+def isprime(n):
+    return sympy.isprime(n)
+
+
 def read_param(file, param):
     with open(file) as f:
         ff = json.load(f)
@@ -19,8 +42,14 @@ def read_param(file, param):
 
 
 def save_param(file, paramname, param):
+    try:
+        with open(file, 'r') as f:
+            it = json.load(f)
+    except:
+        it = {}
+    it[paramname] = param
     with open(file, 'w') as f:
-        json.dump({paramname: param}, f)
+        json.dump(it, f)
 
 
 def write_log(line, file='log.log'):

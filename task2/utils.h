@@ -45,16 +45,28 @@ vector<int> read_file(const string &path) {
     return result;
 }
 
-void write_file(const string &path, vector<int> bytes) {
-    std::ofstream of(path, std::ifstream::binary);
-
+void write_file(const string &path, vector<int> &bytes, int pos) {
+    std::ofstream of(path, ios::out|ios::binary);
+    for (int i = 0; i < 20; i++) {
+        cout << bytes[pos + i] << " ";
+    }
     char * ww = new char[bytes.size()];
-
-    for (int i = 0; i < bytes.size(); i++)
+    cout << " size: " << bytes.size() << endl;
+    for (int i = 0; i < bytes.size(); i++) {
         ww[i] = byte(bytes[i]);
+        // cout << ww[i] << " ";
+    }
+    for (int i = 0; i < 20; i++) {
+        cout << ww[pos + i] << " ";
+    }
+    cout << endl;
+    cout << "size ww: " << sizeof(ww) << endl;
 
-    of.write(ww, (int)bytes.size());
+    cout << of.bad() << endl;
+    of.write(ww, sizeof(ww));
+    of.flush();
     delete[] ww;
+
     of.close();
 }
 
@@ -88,7 +100,18 @@ string int_to_string(int d) {
     return  std::to_string(d);
 }
 
+string MBFromW(LPCWSTR pwsz, UINT cp) {
+    int cch = WideCharToMultiByte(cp, 0, pwsz, -1, 0, 0, NULL, NULL);
 
+    char* psz = new char[cch];
+
+    WideCharToMultiByte(cp, 0, pwsz, -1, psz, cch, NULL, NULL);
+
+    std::string st(psz);
+    delete[] psz;
+
+    return st;
+}
 
 int get_file_size(const string &filename) {
     std::ifstream in(filename, std::ifstream::ate | std::ifstream::binary);
