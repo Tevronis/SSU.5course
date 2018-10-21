@@ -2,6 +2,8 @@ import random
 
 import sympy
 
+from euclid import euclid_extended
+
 
 def get_big_digit(a=10 ** 100, b=10 ** 110):
     return random.randint(a, b)
@@ -9,6 +11,10 @@ def get_big_digit(a=10 ** 100, b=10 ** 110):
 
 def get_big_prime(a=10 ** 100, b=10 ** 110):
     return sympy.randprime(a, b)
+
+
+def jacobi_symbol(m, n):
+    return sympy.jacobi_symbol(m, n)
 
 
 def phi(n):
@@ -44,43 +50,19 @@ def generator(p):
     return -1
 
 
-def extended_euclid(a, b):
-    if b == 0:
-        d = a
-        x = 1
-        y = 0
-        return x, y, d
-
-    x2 = 1
-    x1 = 0
-    y2 = 0
-    y1 = 1
-    while b > 0:
-        q = a // b
-        r = a - q * b
-        x = x2 - q * x1
-        y = y2 - q * y1
-        a = b
-        b = r
-        x2 = x1
-        x1 = x
-        y2 = y1
-        y1 = y
-    d = a
-    x = x2
-    y = y2
-    return x, y, d
-
-
 def inverse(a, n):
-    x, y, d = extended_euclid(a, n)
+    x, y, d = euclid_extended(a, n)
     if d == 1:
         x = (x % n + n) % n
         return x
     return 0
 
 
-if __name__ == '__main__':
+def test():
     n = int(input("Generator tst: "))
 
     print('Первообразный корень по модулю {}: '.format(n) + str(generator(n)))
+
+
+if __name__ == '__main__':
+    test()
