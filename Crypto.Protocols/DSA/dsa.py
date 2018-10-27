@@ -14,9 +14,9 @@ def get_public_params(len_p):
     while True:
         q = utils.get_big_prime(2 ** (160 - 1), 2 ** 160)
         p = q * (2 ** (len_p - 160))
-        print('p:', len(bin(p)[2:]), 'bit')
+        # print('p:', len(bin(p)[2:]), 'bit')
         high = 2 ** len_p
-        print('high:', len(bin(high)[2:]), 'bit')
+        # print('high:', len(bin(high)[2:]), 'bit')
         while p < high:
             p += q
             if not isprime(p + 1):
@@ -26,8 +26,8 @@ def get_public_params(len_p):
                 break
         if isprime(p):
             break
-    print(p)
-    print('p:', len(bin(p)[2:]), 'bit')
+    # print(p)
+    # print('p:', len(bin(p)[2:]), 'bit')
     h = 2
     while not pow(h, (p - 1) // q, p) > 1:
         h += 1
@@ -79,7 +79,7 @@ def main():
         q = read_param('q.json', 'q')
         k = utils.get_big_prime(2, q)
         save_param('k.json', 'k', k)
-    elif args.m == 4:  # Алиса подписывает
+    # elif args.m == 4:  # Алиса подписывает
         g = read_param('g.json', 'g')
         k = read_param('k.json', 'k')
         p = read_param('p.json', 'p')
@@ -89,7 +89,7 @@ def main():
         s = (utils.inverse(k, q) * (get_hash(m) + x * r)) % q
         save_param('signature.json', 'r', r)
         save_param('signature.json', 's', s)
-    elif args.m == 5:  # боб проверяет
+    elif args.m == 4:  # боб проверяет
         s = read_param('signature.json', 's')
         r = read_param('signature.json', 'r')
         q = read_param('q.json', 'q')
@@ -101,7 +101,12 @@ def main():
         u2 = r * w % q
         v = ((pow(g, u1, p) * pow(y, u2, p)) % p) % q
         save_param('v.json', 'v', v)
-
+        if v == r:
+            print("Подпись верна")
+            input()
+        else:
+            print("Подпись не верна")
+    # 2.3
     else:
         write_log('Bad args')
 
