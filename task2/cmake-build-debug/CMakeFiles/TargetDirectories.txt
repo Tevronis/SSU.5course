@@ -1,0 +1,3 @@
+C:/Users/Mike/PycharmProjects/SSU.5course/task2/cmake-build-debug/CMakeFiles/installer.dir
+C:/Users/Mike/PycharmProjects/SSU.5course/task2/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/Mike/PycharmProjects/SSU.5course/task2/cmake-build-debug/CMakeFiles/rebuild_cache.dir

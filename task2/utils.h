@@ -21,6 +21,10 @@ using namespace std;
 
 typedef unsigned char byte;
 
+bool cmdOptionExists(char** begin, char** end, const std::string& option) {
+    return std::find(begin, end, option) != end;
+}
+
 vector<int> read_file(const string &path) {
     vector<int> result;
     std::ifstream is(path, std::ifstream::binary);
@@ -45,29 +49,41 @@ vector<int> read_file(const string &path) {
     return result;
 }
 
-void write_file(const string &path, vector<int> &bytes, int pos) {
+void write_file(const string &path, vector<int> &bytes) {
     std::ofstream of(path, ios::out|ios::binary);
-    for (int i = 0; i < 20; i++) {
-        cout << bytes[pos + i] << " ";
-    }
+
     char * ww = new char[bytes.size()];
-    cout << " size: " << bytes.size() << endl;
+
     for (int i = 0; i < bytes.size(); i++) {
         ww[i] = byte(bytes[i]);
-        // cout << ww[i] << " ";
     }
-    for (int i = 0; i < 20; i++) {
-        cout << ww[pos + i] << " ";
-    }
-    cout << endl;
-    cout << "size ww: " << sizeof(ww) << endl;
 
-    cout << of.bad() << endl;
-    of.write(ww, sizeof(ww));
+    of.write(ww, bytes.size() * sizeof(int));
     of.flush();
     delete[] ww;
 
     of.close();
+}
+
+void write_file_deep(const char *filename, vector<int> &bytes) {
+    HANDLE file = ::CreateFile(TEXT(filename), GENERIC_READ | GENERIC_WRITE, 0,
+                               NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+    if(INVALID_HANDLE_VALUE == file)
+        cout <<  ::GetLastError();
+
+    int SIZE = bytes.size();
+    char *mass = new char[bytes.size()];
+    for (int i = 0; i < bytes.size(); i++) {
+        mass[i] = byte(bytes[i]);
+    }
+    for (int i = 0; i < 20; i++) {
+        cout << mass[i] << " ";
+    }
+
+    DWORD dwNumberOfBytesWritten;
+    WriteFile(file, (LPCVOID)mass, SIZE * sizeof(char), &dwNumberOfBytesWritten, NULL);
+
+    CloseHandle(file);
 }
 
 string string_to_hex(string &s) {
@@ -139,7 +155,11 @@ string get_filename(string path) {
     return s.back();
 }
 
-string get_drive_name(string path) {
+string get_current_drive_name() {
+    char current_work_dir[FILENAME_MAX];
+    _getcwd(current_work_dir, sizeof(current_work_dir));
+    std::cout << "\t" << current_work_dir << endl;
+    string path(current_work_dir);
     vector<string> s = split(std::move(path), '\\');
     return s.front();
 }
