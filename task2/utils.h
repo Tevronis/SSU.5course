@@ -49,22 +49,6 @@ vector<int> read_file(const string &path) {
     return result;
 }
 
-void write_file(const string &path, vector<int> &bytes) {
-    std::ofstream of(path, ios::out|ios::binary);
-
-    char * ww = new char[bytes.size()];
-
-    for (int i = 0; i < bytes.size(); i++) {
-        ww[i] = byte(bytes[i]);
-    }
-
-    of.write(ww, bytes.size() * sizeof(int));
-    of.flush();
-    delete[] ww;
-
-    of.close();
-}
-
 void write_file_deep(const char *filename, vector<int> &bytes) {
     HANDLE file = ::CreateFile(TEXT(filename), GENERIC_READ | GENERIC_WRITE, 0,
                                NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -75,9 +59,6 @@ void write_file_deep(const char *filename, vector<int> &bytes) {
     char *mass = new char[bytes.size()];
     for (int i = 0; i < bytes.size(); i++) {
         mass[i] = byte(bytes[i]);
-    }
-    for (int i = 0; i < 20; i++) {
-        cout << mass[i] << " ";
     }
 
     DWORD dwNumberOfBytesWritten;
@@ -158,7 +139,7 @@ string get_filename(string path) {
 string get_current_drive_name() {
     char current_work_dir[FILENAME_MAX];
     _getcwd(current_work_dir, sizeof(current_work_dir));
-    std::cout << "\t" << current_work_dir << endl;
+    // std::cout << "\t" << current_work_dir << endl;
     string path(current_work_dir);
     vector<string> s = split(std::move(path), '\\');
     return s.front();

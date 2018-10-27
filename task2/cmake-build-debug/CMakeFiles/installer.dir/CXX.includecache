@@ -23,8 +23,6 @@ vector
 -
 
 C:/Users/Mike/PycharmProjects/SSU.5course/task2/main.cpp
-utility
--
 iostream
 -
 string
@@ -37,13 +35,9 @@ vector
 -
 direct.h
 -
-sstream
--
 assert.h
 -
 stdio.h
--
-sys/stat.h
 -
 utils.h
 C:/Users/Mike/PycharmProjects/SSU.5course/task2/utils.h

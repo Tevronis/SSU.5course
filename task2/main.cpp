@@ -1,14 +1,11 @@
-#include <utility>
 #include <iostream>
 #include <string>
 #include <algorithm>
 #include <fstream>
 #include <vector>
 #include <direct.h>
-#include <sstream>
 #include <assert.h>
 #include <stdio.h>
-#include <sys/stat.h>
 #include "utils.h"
 #include "drive_serial.h"
 #include "md5.h"
@@ -92,18 +89,20 @@ vector<string> get_system_params(const string &filename, const string &filename2
     result.emplace_back(md5.digestString(const_cast<char *>(to_hash.c_str())));
 
     string drive_name = get_current_drive_name();
-    cout << "drive name: " << drive_name << endl;
+    // cout << "drive name: " << drive_name << endl;
     LPCTSTR serial;
     GetPhysicalDriveSerialNumber(serial, drive_name);
     result.emplace_back(serial);
-    cout << "serial: " << serial << std::endl;
+    // cout << "serial: " << serial << std::endl;
 
     if (hash_mode) {
         string sresult;
         for (const string &s: result) {
             sresult += s;
         }
-
+        result = vector<string>();
+        result.emplace_back(md5.digestString(const_cast<char *>(sresult.c_str())));
+        // cout << "result front: " << result[0] << endl;
     }
     return result;
 }
@@ -128,21 +127,34 @@ int main(int argc, char* argv[]) {
     // installer.exe program.exe
     if (get_filename(argv[0]) == "installer.exe") {
         vector<int> f = read_file(argv[0]);
-        vector<string> system_params = get_system_params(argv[0], argv[1]);
+        vector<string> system_params;
+        char * create_program_filename;
+        if (argc > 1)
+            create_program_filename = argv[1];
+        else
+            create_program_filename = const_cast<char *>("program.exe");
+        if (cmdOptionExists(argv, argv+argc, "-hash"))
+            system_params = get_system_params(argv[0], create_program_filename, true);
+        else
+            system_params = get_system_params(argv[0], create_program_filename);
         string to_set;
         for (const string &s: system_params) {
             to_set += s + "|";
-            cout << s << " ";
+            // cout << s << " ";
         }
-        cout << endl;
-        int pos = set_string_to_config(f, to_set);
-        const char * ff = argv[1];
+        set_string_to_config(f, to_set);
+        const char * ff = create_program_filename;
         write_file_deep(ff, f);
     } else {
         vector<int> f = read_file(argv[0]);
-        vector<string> system_params = get_system_params(argv[0], argv[0]);
         vector<string> config_params = get_config_params(f);
-        for (string s: config_params) {
+        vector<string> system_params;
+        if (config_params.size() == 1)
+            system_params = get_system_params(argv[0], argv[0], true);
+        else
+            system_params = get_system_params(argv[0], argv[0]);
+
+        /*for (string s: config_params) {
             cout << s << " ";
         }
         cout << endl;
@@ -150,11 +162,11 @@ int main(int argc, char* argv[]) {
             cout << s << " ";
         }
         cout << endl;
-        cout << system_params.size() << " " << config_params.size() << endl;
+        cout << system_params.size() << " " << config_params.size() << endl;*/
         if (system_params.size() != config_params.size())
             exit(0);
         for (int i = 0; i < system_params.size(); i++) {
-            cout << system_params[i].length() << " " << config_params[i].length() << endl;
+            // cout << system_params[i].length() << " " << config_params[i].length() << endl;
             if (system_params[i] != config_params[i])
                 exit(0);
         }
