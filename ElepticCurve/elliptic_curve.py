@@ -1,19 +1,16 @@
 # -*- coding: utf-8 -*-
 from random import randint
 
-from utils import inverse
+from utils import get_prime, complex_decomposition, inverse, legendre_symbol, isprime
 
 INF = 100000
 
 
 class EllipticPoint:
     def __init__(self, p, a=None, b=None):
-        if a is None or b is None:
-            self.x = randint(1, p)
-            self.y = randint(1, p)
-        else:
-            self.x = a
-            self.y = b
+        self.p = p
+        self.x = randint(1, p) if a is None else a
+        self.y = randint(1, p) if b is None else b
 
     @staticmethod
     def sum(P, Q, a, p):
@@ -52,7 +49,7 @@ class EllipticPoint:
 
     @staticmethod
     def equal_inv(p, q, mod):
-        return p.x == q.x and p.y != q.y and pow(p.y, 2, mod) == pow(q.y, 2, mod)
+        return p.x == q.x and p.y == -q.y % mod
 
     @staticmethod
     def iszero(p):
@@ -66,6 +63,57 @@ class EllipticPoint:
 
     def __str__(self):
         return str([self.x, self.y])
+
+    def __hash__(self):
+        return (self.x * 31 + self.y) % self.p
+
+
+def generator_elliptic_curve(l, m):
+    while True:
+        while True:
+            p = get_prime(l)
+            if p % 4 == 1:
+                break
+
+        a, b = complex_decomposition(1, p)
+        assert a * a + b * b == p
+        T = [-2 * a, -2 * b, 2 * a, 2 * b]
+        for t in T:
+            N = p + 1 + t
+            if isprime(N // 2):
+                r = N // 2
+                break
+            if isprime(N // 4):
+                r = N // 4
+                break
+        else:
+            continue
+
+        good = True
+        for i in range(1, m):
+            if (p ** i) % r == 1:
+                good = False
+        if p == r or not good:
+            continue
+
+        while True:
+            e = EllipticPoint(p)
+            A = ((e.y ** 2 - e.x ** 3) * inverse(e.x, p)) % p
+            good = False
+            if N == r * 2:
+                if legendre_symbol(-A, p) == -1:
+                    good = True
+            if N == r * 4:
+                if legendre_symbol(-A, p) == 1:
+                    good = True
+            if not good:
+                continue
+
+            m = EllipticPoint.mul(e, N, A, p)
+            if m == EllipticPoint(p, -1, -1):
+                break
+        Q = EllipticPoint.mul(e, N // r, A, p)
+        return p, A, Q, r
 
 
 def test():
