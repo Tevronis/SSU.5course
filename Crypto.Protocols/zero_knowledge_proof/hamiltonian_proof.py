@@ -172,7 +172,7 @@ def main():
     parser.add_argument('-b', type=int)
     parser.add_argument('--draw', action='store_true')
     parser = parser.parse_args()
-
+    # open('file', 'rb').read()
     if parser.m == 1:  # Пегги
         graph_size = utils.read_param('graph_size', 'size')
         edges, cycle = generate_graph(graph_size)
@@ -185,6 +185,7 @@ def main():
         cycle = utils.read_param('G.param', 'cycle')
         g = Graph(edges, cycle)
         iso_graph, iso = create_iso_graph(g)
+        utils.save_param('H(graph).param', 'edges', iso_graph.edges)
         utils.save_param('H.param', 'edges', iso_graph.edges)
         utils.save_param('H.param', 'cycle', iso_graph.cycle)
         utils.save_param('H.param', 'iso', iso)
