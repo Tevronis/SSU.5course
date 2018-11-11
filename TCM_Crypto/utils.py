@@ -5,6 +5,10 @@ import sympy
 from euclid import euclid_extended
 
 
+MAX_B_SIZE = 5000
+MAX_SUBSET = 30
+
+
 def get_big_digit(a=10 ** 100, b=10 ** 110):
     return random.randint(a, b)
 
@@ -56,6 +60,37 @@ def inverse(a, n):
         x = (x % n + n) % n
         return x
     return 0
+
+
+def generate_base(desired_count):
+    base = [2, 3, 5]
+    counter = 7
+    while len(base) < desired_count:
+        for b in base:
+            if counter % b == 0:
+                break
+            if b > counter // 2:
+                base.append(counter)
+                break
+        counter += 1
+    return base
+
+
+def legendre(a, n):
+    a %= n
+    if a == 0:
+        return 0
+    elif a == 1:
+        return 1
+    return pow(a, (n - 1) // 2, n)
+
+
+def fac2k(a):
+    k = 0
+    while a & 1 == 0:
+        a >>= 1
+        k += 1
+    return a, k
 
 
 def test():

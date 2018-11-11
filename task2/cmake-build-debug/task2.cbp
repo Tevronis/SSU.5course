@@ -80,16 +80,7 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="C:/Users/Mike/PycharmProjects/SSU.5course/task2/drive_serial.h">
-			<Option target="installer"/>
-		</Unit>
 		<Unit filename="C:/Users/Mike/PycharmProjects/SSU.5course/task2/main.cpp">
-			<Option target="installer"/>
-		</Unit>
-		<Unit filename="C:/Users/Mike/PycharmProjects/SSU.5course/task2/md5.h">
-			<Option target="installer"/>
-		</Unit>
-		<Unit filename="C:/Users/Mike/PycharmProjects/SSU.5course/task2/utils.h">
 			<Option target="installer"/>
 		</Unit>
 		<Unit filename="C:/Users/Mike/PycharmProjects/SSU.5course/task2/CMakeLists.txt">

@@ -38,10 +38,10 @@ def main(argv):
     mod = argv[2]
     a = [int(item) for item in input('a: ').split()]
     m = [int(item) for item in input('m: ').split()]
-    if mod == 1:
-        print(chinese_theorem(a, m))
-    if mod == 2:
-        print(garner(a, m))
+    #if mod == 1:
+    print(chinese_theorem(a, m))
+    #if mod == 2:
+    print(garner(a, m))
 
 
 if __name__ == '__main__':

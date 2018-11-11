@@ -40,6 +40,7 @@ int find_in_bytefile(vector<int> &v, string s) {
 
 int get_config_possible_len(vector<int> &f, int start) {
     /* config_system[result] */
+
     int pos = start + 14;
     std::stringstream stream;
     int c = string_to_vector_int("]")[0];
@@ -125,14 +126,15 @@ vector<string> get_config_params(vector<int> &byte_file) {
 int main(int argc, char* argv[]) {
     cout << "config: " << config << endl;
     // installer.exe program.exe
-    if (get_filename(argv[0]) == "installer.exe") {
+    if (config[18] == ' ') {
+    //if (get_filename(argv[0]) == "installer.exe") {
         vector<int> f = read_file(argv[0]);
         vector<string> system_params;
         char * create_program_filename;
         if (argc > 1)
             create_program_filename = argv[1];
         else
-            create_program_filename = const_cast<char *>("program.exe");
+            create_program_filename = const_cast<char *>("installer.exe");
         if (cmdOptionExists(argv, argv+argc, "-hash"))
             system_params = get_system_params(argv[0], create_program_filename, true);
         else
@@ -143,8 +145,13 @@ int main(int argc, char* argv[]) {
             // cout << s << " ";
         }
         set_string_to_config(f, to_set);
-        const char * ff = create_program_filename;
+        const char * ff = "program.exe";
         write_file_deep(ff, f);
+        ofstream myfile;
+        myfile.open("1.bat");
+        myfile << "timeout 5\ndel installer.exe\nrename program.exe installer.exe\ndel 1.bat";
+        myfile.close();
+        ShellExecute ( NULL, NULL, "1.bat", NULL, NULL, SW_SHOWNORMAL );
     } else {
         vector<int> f = read_file(argv[0]);
         vector<string> config_params = get_config_params(f);
@@ -154,7 +161,8 @@ int main(int argc, char* argv[]) {
         else
             system_params = get_system_params(argv[0], argv[0]);
 
-        /*for (string s: config_params) {
+
+         for (string s: config_params) {
             cout << s << " ";
         }
         cout << endl;
@@ -162,7 +170,7 @@ int main(int argc, char* argv[]) {
             cout << s << " ";
         }
         cout << endl;
-        cout << system_params.size() << " " << config_params.size() << endl;*/
+        cout << system_params.size() << " " << config_params.size() << endl;
         if (system_params.size() != config_params.size())
             exit(0);
         for (int i = 0; i < system_params.size(); i++) {
@@ -175,7 +183,8 @@ int main(int argc, char* argv[]) {
 
     //system("wmic path win32_physicalmedia get SerialNumber");
     // wmic diskdrive get model,name,serialnumber
-
+    //f();
+    //system("del installer.exe");
     system("pause");
-    return 0;
+    //return 0;
 }

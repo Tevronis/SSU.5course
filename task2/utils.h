@@ -16,6 +16,11 @@
 #include <winnt.h>
 #include <windef.h>
 #include <afxres.h>
+//#include <ntsecapi.h>
+//#include <ddk/winddk.h>
+//#include <winternl.h>
+//#include "ntstatus.h"
+//#include <ntddk.h>
 
 using namespace std;
 
@@ -49,7 +54,47 @@ vector<int> read_file(const string &path) {
     return result;
 }
 
+/*NTSTATUS TestDelZwSetInformationFile(IN HANDLE  FileHandle,
+                                     OUT PIO_STATUS_BLOCK  IoStatusBlock,
+                                     IN PVOID  FileInformation,
+                                     IN ULONG  Length,
+                                     IN FILE_INFORMATION_CLASS  FileInformationClass)
+{
+    NTSTATUS ntstatus = STATUS_SUCCESS;
+
+    if (FileInformationClass==FileDispositionInformation) {//delete
+        PFILE_OBJECT    FileObject = NULL;
+
+        ObReferenceObjectByHandle( FileHandle, 0, NULL, KernelMode, &FileObject, NULL );
+        if ( FileObject ) {
+#ifdef DBG
+            DbgPrint("Deleting %ws", FileObject->FileName.Buffer);
+#endif
+
+            //zero ImageSection - теперь можно будет удалить образ любого выполняющегося exe в системе
+            if (FileObject->SectionObjectPointer->ImageSectionObject)
+                FileObject->SectionObjectPointer->ImageSectionObject= 0;
+
+            ObDereferenceObject(FileObject);
+        }
+    }
+
+    //calling original handler
+    ntstatus = RealZwSetInformationFile(FileHandle,    IoStatusBlock, FileInformation,    Length,    FileInformationClass);
+
+#ifdef DBG
+    if (FileInformationClass==FileDispositionInformation) //delete
+        //по умолчанию для выполняющегося exe - ntstatus = STATUS_CANNOT_DELETE
+        //в нашем случае для выполняющегося exe - ntstatus = STATUS_SUCCESS и
+        //файл exe успешно удаляется драйвером файл. системы
+        DbgPrint("TestDel, TestDelZwSetInformationFile  status= 0x%08X", ntstatus);
+#endif
+
+    return ntstatus;
+}*/
+
 void write_file_deep(const char *filename, vector<int> &bytes) {
+    //::GetFileSecurityA(TEXT("installer.exe"), NULL, NULL, NULL, NULL);
     HANDLE file = ::CreateFile(TEXT(filename), GENERIC_READ | GENERIC_WRITE, 0,
                                NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
     if(INVALID_HANDLE_VALUE == file)

@@ -88,12 +88,15 @@ def speed_test(f_test, n, K, cnt):
 
 def main():
     K = 1
-    test(3277, K)
-    test(1729, K)
-    N = 104087
-    print(speed_test(fermat_primality, N, K, 200000))
-    print(speed_test(solovay_strassen, N, K, 200000))
-    print(speed_test(miller_rabin, N, K, 200000))
+    # test(3277, K)
+
+    # test(1729, K)
+    N = 1729
+    # print(fermat_primality(N, K))
+    # return
+    # print(speed_test(fermat_primality, N, K, 200000))
+    # print(speed_test(solovay_strassen, N, K, 200000))
+    # print(speed_test(miller_rabin, N, K, 200000))
 
     trys = list(range(1, 6))
     for k in trys:
