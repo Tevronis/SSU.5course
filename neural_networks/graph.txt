@@ -1,0 +1,1 @@
+(a1, a2, 1), (a4, a3, 1), (a3, a2, 2), (a3, a1, 1), (a2, a7, 1), (koshka, tiger, 1), (bobik, tiger, 2), (tiger, a2, 3)
