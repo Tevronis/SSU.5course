@@ -55,6 +55,9 @@ class EllipticPoint:
     def iszero(p):
         return p.x == -1 and p.y == -1
 
+    def in_curve(self, a):
+        return self.y ** 2 % self.p == (self.x ** 3 + a * self.x) % self.p
+
     def __eq__(self, other):
         return EllipticPoint.equal(self, other)
 
