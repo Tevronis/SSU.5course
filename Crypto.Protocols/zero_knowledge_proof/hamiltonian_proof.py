@@ -172,23 +172,22 @@ def main():
     parser.add_argument('-b', type=int)
     parser.add_argument('--draw', action='store_true')
     parser = parser.parse_args()
-    # open('file', 'rb').read()
+
     if parser.m == 1:  # Пегги
         graph_size = utils.read_param('graph_size', 'size')
         edges, cycle = generate_graph(graph_size)
-        utils.save_param('G.param', 'edges', edges)
-        utils.save_param('G.param', 'cycle', cycle)
+        utils.save_param('G_graph.param', 'edges', edges)
+        utils.save_param('Peggy/G_cycle.param', 'cycle', cycle)
         if parser.draw:
             draw_graph(edges)
     elif parser.m == 2:  # Пегги. генерация изоморфного графа
-        edges = utils.read_param('G.param', 'edges')
-        cycle = utils.read_param('G.param', 'cycle')
+        edges = utils.read_param('G_graph.param', 'edges')
+        cycle = utils.read_param('Peggy/G_cycle.param', 'cycle')
         g = Graph(edges, cycle)
         iso_graph, iso = create_iso_graph(g)
-        utils.save_param('H(graph).param', 'edges', iso_graph.edges)
-        utils.save_param('H.param', 'edges', iso_graph.edges)
-        utils.save_param('H.param', 'cycle', iso_graph.cycle)
-        utils.save_param('H.param', 'iso', iso)
+        utils.save_param('H_graph.param', 'edges', iso_graph.edges)
+        utils.save_param('Peggy/H_cycle.param', 'cycle', iso_graph.cycle)
+        utils.save_param('Peggy/H_iso.param', 'iso', iso)
         if parser.draw:
             draw_graph(iso_graph.edges)
     elif parser.m == 3:  # Виктор
@@ -199,22 +198,22 @@ def main():
     elif parser.m == 4:  # Пегги исполняет просьбу исходя из b
         b = utils.read_param('b.param', 'b')
         if b == 0:
-            iso = utils.read_param('H.param', 'iso')
+            iso = utils.read_param('Peggy/H_iso.param', 'iso')
             utils.save_param('iso_GH.param', 'iso', iso)
         elif b == 1:
-            cycle = utils.read_param('H.param', 'cycle')
+            cycle = utils.read_param('Peggy/H_cycle.param', 'cycle')
             utils.save_param('cycle_in_H.param', 'cycle', cycle)
     elif parser.m == 5:  # Виктор проверяет то что предоставила Пегги
         b = utils.read_param('b.param', 'b')
         if b == 0:
             iso = utils.read_param('iso_GH.param', 'iso')
-            G = utils.read_param('G.param', 'edges')
-            H = utils.read_param('H.param', 'edges')
+            G = utils.read_param('G_graph.param', 'edges')
+            H = utils.read_param('H_graph.param', 'edges')
             result = check_iso(G, H, iso)
             utils.save_param('result.txt', 'check iso', result)
         elif b == 1:
             cycle = utils.read_param('cycle_in_H.param', 'cycle')
-            H = utils.read_param('H.param', 'edges')
+            H = utils.read_param('H_graph.param', 'edges')
             result = check_gam_cycle(H, cycle)
             utils.save_param('result.txt', 'check cycle', result)
 
