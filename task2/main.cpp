@@ -161,30 +161,36 @@ int main(int argc, char* argv[]) {
         else
             system_params = get_system_params(argv[0], argv[0]);
 
-
-         for (string s: config_params) {
-            cout << s << " ";
-        }
-        cout << endl;
-        for (string s: system_params) {
-            cout << s << " ";
-        }
-        cout << endl;
-        cout << system_params.size() << " " << config_params.size() << endl;
-        if (system_params.size() != config_params.size())
+        if (system_params.size() != config_params.size()) {
+            cout << "Incorrect count of system params" << endl;
             exit(0);
+        }
+        bool flag = false;
         for (int i = 0; i < system_params.size(); i++) {
-            // cout << system_params[i].length() << " " << config_params[i].length() << endl;
-            if (system_params[i] != config_params[i])
-                exit(0);
+            if (system_params[i] != config_params[i]) {
+                if (i == 0)
+                    cout << "Incorrect filename" << endl;
+                if (i == 1)
+                    cout << "Incorrect filesize" << endl;
+                if (i == 2)
+                    cout << "Incorrect hash(file)" << endl;
+                if (i == 3)
+                    cout << "Incorrect drive serial" << endl;
+                flag = true;
+            }
+        }
+        if (flag) {
+            system("pause");
+            exit(0);
         }
         cout << "good finish" << endl;
+        system("pause");
     }
 
     //system("wmic path win32_physicalmedia get SerialNumber");
     // wmic diskdrive get model,name,serialnumber
     //f();
     //system("del installer.exe");
-    system("pause");
+    //system("pause");
     //return 0;
 }

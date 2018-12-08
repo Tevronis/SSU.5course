@@ -69,8 +69,6 @@ sstream
 -
 assert.h
 -
-winnt.h
--
 windef.h
 -
 afxres.h

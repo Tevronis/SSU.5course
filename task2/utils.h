@@ -13,7 +13,7 @@
 #include <vector>
 #include <sstream>
 #include <assert.h>
-#include <winnt.h>
+//#include <winnt.h>
 #include <windef.h>
 #include <afxres.h>
 //#include <ntsecapi.h>
