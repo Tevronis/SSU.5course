@@ -42,26 +42,19 @@ def euclid_bin(a, b):
 
 
 def euclid_extended(a, b):
-    if not 0 < b <= a:
-        return False
-    r = [a, b]
-    x = [1, 0]
-    y = [0, 1]
-    i = 1
-    q = [0]
-    while True:
-        q.append(r[i - 1] // r[i])
-        r.append(r[i - 1] % r[i])
-        if r[i + 1] == 0:
-            d = r[i]
-            X = x[i]
-            Y = y[i]
-            break
-        else:
-            x.append(x[i - 1] - q[i] * x[i])
-            y.append(y[i - 1] - q[i] * y[i])
-            i += 1
-    return d, X, Y
+    r0, r1 = a, b
+    x0, x1 = 1, 0
+    y0, y1 = 0, 1
+
+    q, r2 = r0 // r1, r0 % r1
+    while r2 != 0:
+        x1, x0 = x0 - q * x1, x1
+        y1, y0 = y0 - q * y1, y1
+
+        r1, r0 = r2, r1
+        q, r2 = r0 // r1, r0 % r1
+
+    return r1, x1, y1
 
 
 def euclid_time_test(a, b):

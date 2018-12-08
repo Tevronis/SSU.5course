@@ -1,8 +1,9 @@
 import random
+from math import gcd
 
 import sympy
 
-from euclid import euclid_extended
+import euclid
 
 
 MAX_B_SIZE = 5000
@@ -54,12 +55,14 @@ def generator(p):
     return -1
 
 
-def inverse(a, n):
-    x, y, d = euclid_extended(a, n)
-    if d == 1:
-        x = (x % n + n) % n
-        return x
-    return 0
+def inverse(a, m):
+    if a == 0:
+        return 0
+    if gcd(a, m) != 1:
+        raise ValueError('Не существует обратного элемента для a={} по модулю m={}'.format(a, m))
+    d, x, y = euclid.euclid_extended(a, m)
+    assert d == 1
+    return x % m
 
 
 def generate_base(desired_count):
