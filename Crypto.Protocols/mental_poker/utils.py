@@ -42,13 +42,19 @@ def decode_utf8(arr):
     result = []
     for item in arr:
         c = digit_to_str(item)
-        result.append(c.decode('utf-8'))
+        result.append(c.decode('utf-8').split('|'))
     return result
 
 
 def save_param(file, paramname, param):
+    try:
+        with open(file, 'r') as f:
+            o = json.load(f)
+    except:
+        o = {}
     with open(file, 'w') as f:
-        json.dump({paramname: param}, f)
+        o[paramname] = param
+        json.dump(o, f, indent=True)
 
 
 def write_log(line, file='log.log'):

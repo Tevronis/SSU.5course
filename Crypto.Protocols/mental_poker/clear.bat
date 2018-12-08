@@ -6,3 +6,4 @@ cd ../Bob
 del *.json
 cd ../Carroll
 del *.json
+cd ..
