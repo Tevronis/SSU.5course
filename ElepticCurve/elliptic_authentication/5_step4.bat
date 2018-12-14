@@ -1,1 +1,0 @@
-python main.py -m 5

@@ -15,9 +15,10 @@ def main():
     debug = False
     if args.m == 0:     # Генерация эллиптическрй кривой
         ln = utils.read_param('ln.json', 'ln')
-        l = utils.read_param('l.json', 'l')
         p, a, Q, r = ec.generator_elliptic_curve(ln, 30)
+        l = random.randint(1, r)
         P = ep.mul(Q, l, a, p)
+        utils.save_param('l.json', 'l', l)
         utils.save_param('curve.json', 'p', p)
         utils.save_param('curve.json', 'Q', (Q.x, Q.y))
         utils.save_param('curve.json', 'a', a)
@@ -55,6 +56,7 @@ def main():
             bit = random.randint(0, 1)
             print(bit)
         else:
+            utils.save_param('stat.json', 'stat', -1)
             raise Exception('rR == Pinf and R is not be equal Pinf')
 
         utils.save_param('bit.json', 'bit', bit)

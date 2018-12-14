@@ -16,7 +16,7 @@ def plot(values):
 
 def main(args):
     if len(args) == 1:
-        l, m = 10, 72
+        l, m = 13, 72
     else:
         l, m = map(int, args[1:])
     start = time()
