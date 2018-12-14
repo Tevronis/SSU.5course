@@ -180,7 +180,7 @@ if __name__ == '__main__':
     if step == 9 or debug:  # Alice
         A_sk = utils.read_param('Alice/A_sk.json', 'key')
         ecards = [] # utils.read_param('Alice/cards.json', 'cards')
-        for idx in range(5):
+        for idx in range(1):
             ecards.append(utils.read_param('Alice/Ea({}).json'.format(idx), 'card'))
         print('Ea(Acards)\t', ecards)
         cards = decrypt(A_sk, ecards)
