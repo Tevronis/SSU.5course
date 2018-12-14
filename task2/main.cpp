@@ -15,8 +15,6 @@ using namespace std;
 
 typedef unsigned char byte;
 
-const string config = "config_system[100]                                                                                                    ";
-
 
 int find_in_bytefile(vector<int> &v, string s) {
     vector<int> sb = string_to_vector_int(std::move(s));
@@ -72,39 +70,53 @@ int set_string_to_config(vector<int> &byte_file, string s) {
     return pos;
 }
 
-vector<string> get_system_params(const string &filename, const string &filename2, bool hash_mode=false) {
+
+void set_string_to_overhead(vector<int> &byte_file, string s) {
+    for (char item : s) {
+        byte_file.push_back(item);
+    }
+}
+
+
+vector<string> get_overhead_params(vector<int> &byte_file) {
+    vector<string> result;
+    string conf;
+    for (int i = byte_file.size() - (4 * 32 + 4); i < byte_file.size(); i++) {
+        int x = byte_file[i];
+        conf += char(x);
+    }
+    result = split(conf, '|');
+    //result.pop_back();
+    return result;
+}
+
+
+vector<string> get_system_params(const string &filename, const string &filename2, bool contain_overhead=false) {
     vector<string> result;
     result.push_back(get_filename(filename2));
-    result.push_back(int_to_string(get_file_size(filename)));
+    if (contain_overhead)
+        result.push_back(int_to_string(get_file_size(filename) - (4 * 32 + 4)));
+    else
+        result.push_back(int_to_string(get_file_size(filename)));
 
     vector<int> file_without_config = read_file(filename);
-    int pos = find_in_bytefile(file_without_config, "config_system");
-    int len = get_config_possible_len(file_without_config, pos);
-    pos = get_config_start_to_write(file_without_config, pos) + 1;
-    for (int i = pos; i < pos + len; i++)
-        file_without_config[i] = 0;
     string to_hash;
-    for (int item : file_without_config)
-        to_hash += int_to_string(item);
+    if (contain_overhead) {
+        for (int i = 0; i < file_without_config.size() - (32 * 4 + 4); i++)
+            to_hash += int_to_string(file_without_config[i]);
+    }
+    else {
+        for (int item : file_without_config)
+            to_hash += int_to_string(item);
+    }
     MD5 md5 = MD5();
     result.emplace_back(md5.digestString(const_cast<char *>(to_hash.c_str())));
 
     string drive_name = get_current_drive_name();
-    // cout << "drive name: " << drive_name << endl;
     LPCTSTR serial;
     GetPhysicalDriveSerialNumber(serial, drive_name);
     result.emplace_back(serial);
-    // cout << "serial: " << serial << std::endl;
 
-    if (hash_mode) {
-        string sresult;
-        for (const string &s: result) {
-            sresult += s;
-        }
-        result = vector<string>();
-        result.emplace_back(md5.digestString(const_cast<char *>(sresult.c_str())));
-        // cout << "result front: " << result[0] << endl;
-    }
     return result;
 }
 
@@ -124,50 +136,54 @@ vector<string> get_config_params(vector<int> &byte_file) {
 }
 
 int main(int argc, char* argv[]) {
-    cout << "config: " << config << endl;
-    // installer.exe program.exe
-    if (config[18] == ' ') {
-    //if (get_filename(argv[0]) == "installer.exe") {
-        vector<int> f = read_file(argv[0]);
+    vector<int> f = read_file(argv[0]);
+    if (f[f.size() - 1] != 124) {
         vector<string> system_params;
         char * create_program_filename;
         if (argc > 1)
             create_program_filename = argv[1];
         else
-            create_program_filename = const_cast<char *>("installer.exe");
-        if (cmdOptionExists(argv, argv+argc, "-hash"))
-            system_params = get_system_params(argv[0], create_program_filename, true);
-        else
-            system_params = get_system_params(argv[0], create_program_filename);
+            create_program_filename = const_cast<char *>(argv[0]);
+        system_params = get_system_params(argv[0], create_program_filename);
         string to_set;
+        MD5 md5 = MD5();
         for (const string &s: system_params) {
-            to_set += s + "|";
-            // cout << s << " ";
+            to_set += md5.digestString(const_cast<char *>(s.c_str()));
+            to_set += "|";
+            cout << to_set << endl;
         }
-        set_string_to_config(f, to_set);
+        set_string_to_overhead(f, to_set);
         const char * ff = "program.exe";
         write_file_deep(ff, f);
         ofstream myfile;
         myfile.open("1.bat");
-        myfile << "timeout 5\ndel installer.exe\nrename program.exe installer.exe\ndel 1.bat";
+        myfile << "timeout 5\ndel " << get_filename(argv[0]) << "\nrename program.exe " << get_filename(argv[0]) << "\ndel 1.bat";
         myfile.close();
         ShellExecute ( NULL, NULL, "1.bat", NULL, NULL, SW_SHOWNORMAL );
     } else {
-        vector<int> f = read_file(argv[0]);
-        vector<string> config_params = get_config_params(f);
+        vector<string> config_params = get_overhead_params(f);
         vector<string> system_params;
-        if (config_params.size() == 1)
-            system_params = get_system_params(argv[0], argv[0], true);
-        else
-            system_params = get_system_params(argv[0], argv[0]);
+        system_params = get_system_params(argv[0], argv[0], true);
 
+        MD5 md5 = MD5();
+
+        /*for (const auto &config_param : config_params) {
+            cout << config_param << " ";
+        }
+        cout << endl;
+        for (const auto &system_param : system_params) {
+            cout << system_param << " ";
+        }
+        cout << endl;*/
         if (system_params.size() != config_params.size()) {
             cout << "Incorrect count of system params" << endl;
+            system("pause");
             exit(0);
         }
         bool flag = false;
         for (int i = 0; i < system_params.size(); i++) {
-            if (system_params[i] != config_params[i]) {
+            cout << md5.digestString(const_cast<char *>(system_params[i].c_str())) << " " << config_params[i] << endl;
+            if (md5.digestString(const_cast<char *>(system_params[i].c_str())) != config_params[i]) {
                 if (i == 0)
                     cout << "Incorrect filename" << endl;
                 if (i == 1)
@@ -186,11 +202,4 @@ int main(int argc, char* argv[]) {
         cout << "good finish" << endl;
         system("pause");
     }
-
-    //system("wmic path win32_physicalmedia get SerialNumber");
-    // wmic diskdrive get model,name,serialnumber
-    //f();
-    //system("del installer.exe");
-    //system("pause");
-    //return 0;
 }
