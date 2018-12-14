@@ -1,10 +1,8 @@
 import copy
-import os
 import random
 import sys
 
 import sympy
-
 import utils
 
 colors_dict = {'1': 'buba', '2': 'baptize', '3': 'spades', '4': 'hearts'}
