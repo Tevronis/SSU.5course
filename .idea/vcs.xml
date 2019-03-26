@@ -2,5 +2,7 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cryptographic_protocols/blakley/crypto_protocols" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/neural_networks/neural_networks" vcs="Git" />
   </component>
 </project>

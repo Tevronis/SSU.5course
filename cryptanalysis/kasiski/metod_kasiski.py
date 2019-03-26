@@ -15,6 +15,7 @@ def get_substrings(length):
     for i in range(0, len(text) - length + 1):
         result[text[i: i + length]] += 1
     ans = set()
+    # print(result)
     for k, v in result.items():
         if v > 2:
             mas = []
@@ -23,7 +24,7 @@ def get_substrings(length):
                 if tmp is None:
                     previous = text.find(k, 0)
                     tmp = previous
-                tmp = text.find(k, tmp + 1)
+                tmp = text.find(k, tmp + len(k) + 1)
                 if tmp != -1:
                     mas.append(tmp-previous)
                     previous = tmp

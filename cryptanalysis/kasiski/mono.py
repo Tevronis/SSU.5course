@@ -41,7 +41,7 @@ def gen_key(length):
 
 def encryption(key, text):
     result = ''
-    options = 'абвгдеёжзийклмнопрстуфхцч.,!1234567890'
+    options = open('alph.txt', 'r').read().strip()
     while len(key) != len(text):
         a = random.randint(0, len(options)-1)
         tmp = options[a]
