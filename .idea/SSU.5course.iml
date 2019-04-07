@@ -3,9 +3,9 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/Crypto.Protocols/blakley/crypto_protocols" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/cryptanalysis/kasiski" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/cryptanalysis/permutation_cipher_analysis" isTestSource="false" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="Python 3.5.1 (C:\Programs\Python-3\python.exe)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="TestRunnerService">
