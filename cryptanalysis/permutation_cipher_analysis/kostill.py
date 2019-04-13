@@ -1,8 +1,8 @@
 import mono
 
 
-def mod100():
-    mod2 = int(input('1 - сгенерировать ключ\n2 - зашифровать\n'))
+def get_cryptotext():
+    mod2 = int(input('1 - сгенерировать ключ\n2 - зашифровать\n> '))
     if mod2 == 1:
         open('key.txt', 'w')
         length = int(input('длина ключа: '))

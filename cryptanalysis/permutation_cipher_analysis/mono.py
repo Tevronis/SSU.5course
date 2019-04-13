@@ -42,7 +42,10 @@ def gen_key(length):
     mas = permutation(length)
     while is_mono(mas) is False:
         mas = permutation(length)
-    return mas
+    res = []
+    for i in range(len(mas)):
+        res.append(mas.index(i))
+    return res
 
 
 def encryption(key, text):

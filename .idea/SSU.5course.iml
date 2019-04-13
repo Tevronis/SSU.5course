@@ -5,7 +5,7 @@
       <sourceFolder url="file://$MODULE_DIR$/Crypto.Protocols/blakley/crypto_protocols" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/cryptanalysis/permutation_cipher_analysis" isTestSource="false" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.5.1 (C:\Programs\Python-3\python.exe)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.7" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="TestRunnerService">

@@ -1,6 +1,6 @@
 
 def del_punctuations(text):
-    str = open('del.txt', 'r').read().strip()
+    str = open('del.txt', 'r', encoding='utf-8').read().strip()
     charr = set()
     for i in str:
         charr.add(i)

@@ -2,7 +2,7 @@
 import json
 from pprint import pprint
 
-from kostill import mod100
+from kostill import get_cryptotext
 from text_modification import del_punctuations, explore_text, get_forbidden_bigrams
 from gen_table import text_division, make_table
 from gen_forest import modify_table, make_forest
@@ -70,18 +70,17 @@ def brute_keys():
     keys = make_keys(forest, l)
     print('ветки: ' + str(keys))
     keys = modify_keys(keys)
-    print('ключи: ' + str(keys))
+    # print('ключи: ' + str(keys))
     decrypt_it(name, keys)
 
 
 def main():
-    mod = int(input('100 - шифрование\n1 - вычисление запретных биграмм\n2 - построение вспомогательной таблицы\n'
-                    '3 - построение ориентированного леса\n4 - перебор ключей\n'))
-    if mod == 100:
-        mod100()
+    mod = int(input('1 - вычисление запретных биграмм\n2 - построение вспомогательной таблицы\n'
+                    '3 - построение ориентированного леса\n4 - перебор ключей\n5 - шифрование\n> '))
+    if mod == 5:
+        get_cryptotext()
     if mod == 0:
         name = input('файл текста: ')
-
         with open(name + '.txt', 'r', encoding='utf-8') as fin:
             text = fin.read()
 

@@ -48,7 +48,7 @@ def make_forest(table):
         dfs(root, forest[root])
 
         with open('forest.json', 'w') as fout:
-            json.dump(forest, fout, indent=2)
+            json.dump(forest, fout, indent=1)
     # rec(forest)
 
 
