@@ -54,10 +54,10 @@ def encryption(key, text):
         a = random.randint(0, len(options)-1)
         tmp = options[a]
         text += tmp
-    result = ''
+    result = ['']*len(key)
     for i in range(len(key)):
-        result += text[key[i]]
-    return result
+        result[key[i]] += text[i]
+    return ''.join(result)
 
 
 def decryption(key, text):
