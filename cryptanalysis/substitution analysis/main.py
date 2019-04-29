@@ -4,7 +4,7 @@ import substitution
 
 
 def keygen():
-    alf = open('alphabet.txt', 'r').read().strip()
+    alf = open('alphabet.txt', 'r').read()
     key = substitution.make_substitution(alf)
     print('alphabet:', alf)
     print('     key:', key)
@@ -18,7 +18,7 @@ def keygen():
 def encryption():
     mod_encoding = int(input('1 - сдвиг\n2 - перестановка\n> '))
     if mod_encoding == 1:
-        alf = open('alphabet.txt', 'r').read().strip()
+        alf = open('alphabet.txt', 'r').read()
         key = int(open('key_shift.txt', 'r').read().strip())
         name = input('файл открытого текста: ')
         with open(name + '.txt', 'r') as fin:
@@ -29,7 +29,7 @@ def encryption():
         print('\nсохранен файл: crypt.txt')
 
     if mod_encoding == 2:
-        alf = open('alphabet.txt', 'r').read().strip()
+        alf = open('alphabet.txt', 'r').read()
         key = open('key_sub.txt', 'r').read()
         name = input('файл открытого текста: ')
         with open(name + '.txt', 'r') as fin:
@@ -44,7 +44,7 @@ def create_table_freq_ot():
     name = input('файл открытого текста: ')
     with open(name + '.txt', 'r') as fin:
         text = fin.read()
-    alf = open('alphabet.txt', 'r').read().strip()
+    alf = open('alphabet.txt', 'r').read()
     table = gen_table.open_table(text, alf)
     with open('ot_table.txt', 'w') as fout:
         for k, v in table:
@@ -55,7 +55,7 @@ def create_table_freq_ot():
 def create_table_freq_crypt():
     with open('crypt.txt', 'r') as fin:
         text = fin.read()
-    alf = open('alphabet.txt', 'r').read().strip()
+    alf = open('alphabet.txt', 'r').read()
     table = gen_table.crypt_table(text, alf)
     with open('crypt_table.txt', 'w') as fout:
         for k, v in table:
@@ -72,7 +72,7 @@ def create_isoton_list():
     with open('crypt_table.txt', 'r') as fin_cr:
         for item in fin_cr:
             table_crypt.append([item[0], float(item[2:])])
-    alf = open('alphabet.txt', 'r').read().strip()
+    alf = open('alphabet.txt', 'r').read()
 
     mod2 = int(input('1 - сдвиг\n2 - перестановка\n> '))
     if mod2 == 1:
@@ -108,7 +108,7 @@ def create_isoton_list():
 def verify_key_list():
     with open('crypt.txt', 'r') as fin:
         text = fin.read()
-    alf = open('alphabet.txt', 'r').read().strip()
+    alf = open('alphabet.txt', 'r').read()
     mod = int(input('1 - сдвиг\n2 - перестановка\n> '))
 
     if mod == 1:
@@ -154,7 +154,7 @@ def main():
         encryption()
 
     if mod == 22:  # дешифрование по сдвигу
-        alf = open('alphabet.txt', 'r').read().strip()
+        alf = open('alphabet.txt', 'r').read()
         key = int(open('key_shift.txt', 'r').read().strip())
         with open('crypt.txt', 'r') as fin:
             text = fin.read()
@@ -163,7 +163,7 @@ def main():
             fout.write(text)
 
     if mod == 33:  # дешифрование по перестановке
-        alf = open('alphabet.txt', 'r').read().strip()
+        alf = open('alphabet.txt', 'r').read()
         key = open('key_sub.txt', 'r').read().strip()
         with open('crypt.txt', 'r') as fin:
             text = fin.read()

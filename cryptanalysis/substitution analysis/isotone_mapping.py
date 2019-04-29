@@ -34,9 +34,9 @@ def blocks_of_size(table_crypt, around):
     # [1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 4, 1, 2, 1, 2, 3]
     # [1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 4, 1, 2, 1, 2, 3]
     # [1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 4, 1, 2, 1, 2, 3]
-    print(block_count)
     if tmp != 0:
         block_count.append(tmp)
+    print(block_count)
     return block_count
 
 
