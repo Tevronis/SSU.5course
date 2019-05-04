@@ -8,7 +8,7 @@ def encrypt():
         name = input('файл: ')
         with open(name + '.txt', 'r') as fin:
             text = fin.read()
-        alf = open('russian.txt', 'r').read().strip()
+        alf = open('alphabet.txt', 'r').read().strip()
         key = open('key.txt', 'r').read().strip()
         open('key_len.txt', 'w').write(str(len(key)))
         text = vigenere.del_not_alf(text, alf)
@@ -19,7 +19,7 @@ def encrypt():
         with open('crypt.txt', 'r') as fin:
             text = fin.read()
         key = open('key.txt').read().strip()
-        alf = open('russian.txt', 'r').read().strip()
+        alf = open('alphabet.txt', 'r').read().strip()
         decrypt = vigenere.vigenere_decryption(text, key, alf)
         open('decrypt.txt', 'w').write(str(decrypt))
 
@@ -30,7 +30,7 @@ def simpson_mode():
     l = int(input('длина ключа: '))
     with open('ot_alf.txt', 'r') as fina:
         alf_ot = fina.read()
-    alf = open('russian.txt', 'r').read().strip()
+    alf = open('alphabet.txt', 'r').read().strip()
     deltas = simpson.get_deltas(l, text, alf, alf_ot)
     keys = simpson.get_keys(deltas, alf)
     with open('answers.txt', 'w') as fout2:
